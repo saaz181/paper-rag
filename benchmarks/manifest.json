@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "page_base": 0,
+  "pdf_page_base": 1,
+  "question_count": 301,
+  "scope": "Single-document, single-designated-page answerable questions. Evidence comes only from local extracted PDF text. Labels are curated drafts, not independently human-adjudicated or exhaustively enumerated relevance judgments.",
+  "documents": [
+    {
+      "filename": "1908.10084v1.pdf",
+      "title": "Sentence-BERT: Sentence Embeddings using Siamese BERT-Networks",
+      "pages": 11,
+      "sha256": "92366d22fc0521350d6cbe0ad72bcee754f90e88181d7b4a8e2adb1e7e594fec",
+      "case_count": 50
+    },
+    {
+      "filename": "2004.04906v3.pdf",
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "pages": 13,
+      "sha256": "3e67fc1a9977715acf722d85f0b7d124b03715e975f6310a4d6c12094190912f",
+      "case_count": 60
+    },
+    {
+      "filename": "2004.12832v2.pdf",
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "pages": 10,
+      "sha256": "2e487d9b96e3c2e5e286d843e98a066adc0442faa3a6e8ddbd1771221bf9ae14",
+      "case_count": 60
+    },
+    {
+      "filename": "2005.11401v4.pdf",
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "pages": 19,
+      "sha256": "23e3249e9a1e75418d82efecab0ea8c4d033b89c93742f63208d47ce01f21233",
+      "case_count": 60
+    },
+    {
+      "filename": "2408.08067v2.pdf",
+      "title": "RAGChecker: A Fine-grained Framework for Diagnosing Retrieval-Augmented Generation",
+      "pages": 27,
+      "sha256": "1034bf8f0b909895540e093f2d42d6d81f1dfae51711fcf1b0379dc834c084c2",
+      "case_count": 71
+    }
+  ],
+  "category_counts": {
+    "ablation": 17,
+    "comparison": 41,
+    "concept": 27,
+    "dataset": 21,
+    "limitation": 12,
+    "method": 77,
+    "metric": 24,
+    "numerical": 38,
+    "result": 19,
+    "training": 25
+  },
+  "chunk_audit": {
+    "settings": {
+      "max_words": 150,
+      "overlap": 25
+    },
+    "cases_with_anchor_retained": 291,
+    "cases_without_anchor_retained": 10,
+    "cases_on_pages_without_retained_chunks": 0,
+    "note": "Anchor retention is a substring diagnostic, not an entailment or answerability judgment. Results depend on current chunking code and settings."
+  }
+}
