@@ -164,3 +164,40 @@ python -m benchmarks.validate
 ```
 
 Validation loads no embedding or generation models, makes no network requests, and does not run the RAG pipeline. It verifies all 301 evidence spans against the PDFs and checks both page-number conventions. No retrieval or answer-quality score has been claimed for this dataset.
+
+## Comparing embedding runs
+
+Use `evaluate.py --embedding-model MODEL --report runs/MODEL/evaluation_results.json`
+with the same corpus and scoring settings, then run:
+
+```bash
+python compare_runs.py runs/minilm/evaluation_results.json runs/e5/evaluation_results.json runs/bge/evaluation_results.json
+```
+
+The first file is the baseline. Configuration and input fingerprints must match
+apart from model-specific embedding settings. Overall metrics, category evidence
+scores, failure changes, and (with full reports) paired case gains/losses are
+printed. The model-dependent `corpus_signature` is not used as a fixed input
+fingerprint; chunk and benchmark hashes are checked instead. See the root README
+for model prefixes, cache isolation, and CLI options.
+
+## Numeric-aware evidence scoring
+
+Current exact and fuzzy document evidence use metric version
+`document_fuzzy_numeric_v2`. Normalization preserves signs, decimal values,
+scientific exponents, and `%` markers as part of complete numeric tokens. For
+example, `61` does not match `61.9`, `-61`, or `61%`; `61 %` matches `61%`.
+Comma thousands separators are normalized (`1,000` matches `1000`). Fuzzy
+windows must preserve these complete numeric tokens. This is lexical matching,
+not numeric reasoning about unit conversions or rounding.
+
+Strict page evidence retains its legacy rules. Old baseline snapshots remain
+historical records; compare current models using newly generated reports with
+the same metric version. The numeric-aware reruns and their comparison live in
+`runs/numeric_v2/` locally.
+
+The current MiniLM baseline is `baselines/minilm_150_25_numeric_v2.json`. Its
+fuzzy evidence scores remain Hit@1 0.561, Hit@3 0.741, and MRR 0.644, but the
+numeric correction changes its stage diagnostics to 9 chunking, 37 retrieval,
+and 32 reranking failures. The old `baselines/minilm_150_25.json` is a historical
+snapshot under v1 rules.

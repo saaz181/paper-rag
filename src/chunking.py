@@ -123,9 +123,6 @@ def chunk_docs(documents, overlap=25, max_words=180):
             text = page['text']
             text = clean_text(text)
 
-            # chunk word wise
-            # chunks = chunk_text(text, chunk_size=chunk_size, overlap=overlap)
-
             # chunk paragraph-wise
             chunks = chunk_paragraph(text, max_words=max_words, overlap=overlap)
 

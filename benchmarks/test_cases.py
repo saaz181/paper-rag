@@ -12,6 +12,7 @@ def load_benchmark(page_base=0):
     """
     if type(page_base) is not int or page_base not in (0, 1):
         raise ValueError("page_base must be 0 or 1")
+
     cases = json.loads(Path(__file__).with_name("cases.json").read_text(encoding="utf-8"))
     for case in cases:
         case["expected_page"] = case["pdf_page"] - 1 + page_base

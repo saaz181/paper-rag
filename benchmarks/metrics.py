@@ -5,15 +5,28 @@ from difflib import SequenceMatcher
 from functools import lru_cache
 
 FUZZY_THRESHOLD = 0.80
+METRIC_VERSION = "document_fuzzy_numeric_v2"
+NORMALIZATION = "nfkc_casefold_pdf_hyphenation_numeric_tokens_v2"
+
+NUMBER_PATTERN = r"[+-]?(?:\d{1,3}(?:,\d{3})+(?:\.\d+)?|\d+(?:\.\d+)?|\.\d+)(?:e[+-]?\d+)?(?:\s*%)?"
+TOKEN_PATTERN = re.compile(
+    r"(?<!\w)" + NUMBER_PATTERN + r"(?:[^\W\d_]\w*)?(?!\w)|\w+"
+)
+
+
+def numeric_tokens(text):
+    return re.findall(NUMBER_PATTERN, text)
 
 
 @lru_cache(maxsize=8192)
 def normalize_text(text):
-    """Normalize PDF ligatures, line-break hyphenation, punctuation and spaces."""
     text = unicodedata.normalize("NFKC", text).casefold()
-    text = re.sub(r"(\w)-\s+(\w)", r"\1\2", text)
-    text = re.sub(r"[^\w\s]", " ", text)
-    return " ".join(text.split())
+    text = text.replace("\u2212", "-")
+    text = re.sub(r"([^\W\d_])-\s+([^\W\d_])", r"\1\2", text)
+    return " ".join(
+        re.sub(r"\s+", "", token.replace(",", ""))
+        for token in TOKEN_PATTERN.findall(text)
+    )
 
 
 @lru_cache(maxsize=8192)
@@ -52,12 +65,12 @@ def fuzzy_contains(anchor, text, threshold=FUZZY_THRESHOLD):
     anchor_words = anchor.split()
     text_words = text.split()
     window_size = len(anchor_words)
-    anchor_numbers = re.findall(r"\d+", anchor)
+    anchor_numbers = numeric_tokens(anchor)
     # Allow one joined/split word, common with PDF line breaks and compounds.
     for size in range(max(1, window_size - 1), window_size + 2):
         for i in range(len(text_words) - size + 1):
             window = " ".join(text_words[i:i + size])
-            if re.findall(r"\d+", window) != anchor_numbers:
+            if numeric_tokens(window) != anchor_numbers:
                 continue
             matcher = SequenceMatcher(None, anchor, window)
             if (matcher.real_quick_ratio() >= threshold

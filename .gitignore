@@ -4,6 +4,7 @@ __pycache__/
 .DS_Store
 cache/
 data/
+runs/
 *.json
 
 # Version the benchmark labels and baseline; keep generated JSON local.

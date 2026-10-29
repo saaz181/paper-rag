@@ -1,0 +1,9 @@
+EMBEDDING_MODEL_NAME = "intfloat/multilingual-e5-large-instruct"
+RERANKER_MODEL_NAME = "cross-encoder/ms-marco-MiniLM-L6-v2"
+RETRIEVAL_METHOD = "hybrid"
+CHUNK_SIZE = 150
+OVERLAP = 25
+BRANCH_TOP_K = 20
+RETRIEVAL_TOP_K = 20
+RRF_K = 60
+RERANK_TOP_K = 3
